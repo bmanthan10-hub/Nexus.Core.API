@@ -1,4 +1,9 @@
+using YourProjectName.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddTransient<IMessageService, MessageService>();
+builder.Services.AddSingleton<ITimeService, TimeService>();
+builder.Services.AddScoped<IRequestCounterService, RequestCounterService>();
 
 // Add services to the container.
 builder.Services.AddControllers();
