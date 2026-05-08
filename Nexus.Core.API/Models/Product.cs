@@ -1,6 +1,9 @@
-﻿public class Product
+﻿namespace Nexus.Core.API.Models
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public decimal Price { get; set; }
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+    }
 }

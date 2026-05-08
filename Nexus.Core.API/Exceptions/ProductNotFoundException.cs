@@ -1,4 +1,10 @@
-﻿public class ProductNotFoundException : Exception
+﻿namespace Nexus.Core.API.Exceptions
 {
-    public ProductNotFoundException(int id) : base($"Product with ID {id} was not found.") { }
+    public class ProductNotFoundException : Exception
+    {
+        public ProductNotFoundException(int id)
+            : base($"Product with ID {id} was not found.")
+        {
+        }
+    }
 }
