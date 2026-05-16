@@ -21,7 +21,6 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Host.UseSerilog();
 
 // Database
@@ -76,8 +75,6 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
-// Simple Swagger - .NET 10 compatible
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -110,6 +107,34 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
 
+// Simple text message endpoint
+app.MapGet("/api/assignment/message", () =>
+    Results.Ok("Hello! This is a simple text message from Minimal API."));
+
+// Query string endpoint with validation
+app.MapGet("/api/assignment/greet", (string? name) =>
+{
+    if (string.IsNullOrWhiteSpace(name))
+    {
+        return Results.BadRequest(new { error = "Name parameter cannot be empty." });
+    }
+    return Results.Ok(new { message = $"Hello, {name}! Value received via query string." });
+});
+
+// POST endpoint that accepts and returns data with validation
+app.MapPost("/api/assignment/echo", handler: (AssignmentPayload? data) =>
+{
+    if (data == null || string.IsNullOrWhiteSpace(data.Content))
+    {
+        return Results.BadRequest(new { error = "Input content cannot be empty." });
+    }
+    return Results.Ok(data);
+});
+
+
+app.MapControllers();
 app.Run();
+
+// DTO for POST Endpoint
+public record AssignmentPayload(string Content);
